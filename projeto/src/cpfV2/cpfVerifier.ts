@@ -1,32 +1,46 @@
-export function cpfVerifier(cpf: string) {
-	if (!cpf) return false;
-  if (typeof cpf !== 'string') return false;
-  if (cpf.length < 11 || cpf.length > 14) return false;
+function hasAllDigitsEqual(cpf: string) {
+  const [firstDigit] = cpf;
+  return cpf.split('').every((character) => character === firstDigit);
+}
 
-  cpf = cpf.replace('.', '').replace('.', '').replace('-', '').replace(' ', '');
+function isValidLenght(cpf: string) {
+  return cpf.length === 11;
+}
 
-  if (cpf.split('').every((character) => character === cpf[0])) return false;
-    let firstTenDigitsAccumulator, firstElevenDigitsAccumulator;
-    let verifierDigit1, verifierDigit2, rest;
-    let currentCpfDigit;
-    let calculatedVerifyDigits;
-    firstTenDigitsAccumulator = firstElevenDigitsAccumulator = 0;
-    verifierDigit1 = verifierDigit2 = rest = 0;
+function cleanCpf(cpf: string) {
+  return cpf.replace(/\D/g, "");
+}
 
-  for (let currentPosition = 1; currentPosition < cpf.length - 1; currentPosition++) {
-    currentCpfDigit = parseInt(cpf.substring(currentPosition - 1, currentPosition));
-    firstTenDigitsAccumulator += (11 - currentPosition) * currentCpfDigit;
-    firstElevenDigitsAccumulator += (12 - currentPosition) * currentCpfDigit;
+function extractDigit(cpf: string) {
+  return cpf.slice(9);
+}
+
+function calculateDigit(cpf: string, factor: number) {
+  let total = 0;
+  for (const digit of cpf) {
+    if (factor > 1) total += Number(digit) * factor--;
   }
+  const rest = total % 11;
 
-  rest = firstTenDigitsAccumulator % 11;
-  verifierDigit1 = rest < 2 ? (verifierDigit1 = 0) : 11 - rest;
-  firstElevenDigitsAccumulator += 2 * verifierDigit1;
-  rest = firstElevenDigitsAccumulator % 11;
-  verifierDigit2 = rest < 2 ? 0 : (11 - rest);
+  return rest < 2 ? 0 : 11 - rest;
+}
 
-  const inputedVerifyDigits = cpf.substring(cpf.length - 2, cpf.length);
+export function cpfVerifier(rawCpf: string) {
+	if (!rawCpf) return false;
+  if (typeof rawCpf !== 'string') return false;
   
-  calculatedVerifyDigits = '' + verifierDigit1 + '' + verifierDigit2;
+  const cpf = cleanCpf(rawCpf);
+
+  if (!isValidLenght(cpf)) return false;
+
+
+  if (hasAllDigitsEqual(cpf)) return false;
+
+  const digit1 = calculateDigit(cpf, 10);
+  const digit2 = calculateDigit(cpf, 11);
+
+  const inputedVerifyDigits = extractDigit(cpf);
+  
+  const calculatedVerifyDigits = `${digit1}${digit2}`;
   return inputedVerifyDigits === calculatedVerifyDigits;
 }
