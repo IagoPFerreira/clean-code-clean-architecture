@@ -24,8 +24,23 @@ test('Deve retornar "false" se o CPF for composto de um só dígito', () => {
   const validCpf = cpfVerifier('111.111.111-11');
   expect(validCpf).toBe(false);
 });
-//86%
-test('Deve retornar "false" se o CPF não for uma string', () => {
-  const validCpf = cpfVerifier(`1234561891011`);
+//96%
+test('Deve retornar "false" se o CPF for uma string vazia', () => {
+  const validCpf = cpfVerifier('');
   expect(validCpf).toBe(false);
+});
+//96%
+test('Deve retornar "false" se o CPF for uma string vazia', () => {
+  const validCpf = cpfVerifier(123 as unknown as string);
+  expect(validCpf).toBe(false);
+});
+//100%
+test('Deve retornar "true" se o CPF for válido com o primeiro dígito 0', () => {
+  const validCpf = cpfVerifier('123.456.789-09');
+  expect(validCpf).toBe(true);
+});
+
+test('Deve retornar "true" se o CPF for válido com o segundo dígito 0', () => {
+  const validCpf = cpfVerifier('147.085.437-60');
+  expect(validCpf).toBe(true);
 });
