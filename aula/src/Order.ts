@@ -1,7 +1,8 @@
-import { validate } from './validate';
+import Cpf from './Cpf';
 
 export default class Order {
+	cpf: Cpf;
 	constructor(cpf: string) {
-		if (!validate(cpf)) throw new Error('Invalid CPF');
+		this.cpf = new Cpf(cpf);
 	}
 }
