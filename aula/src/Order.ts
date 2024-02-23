@@ -23,11 +23,11 @@ export default class Order {
 
 	getTotal() {
 		let total = this.orderItems.reduce(
-			(acc, orderItem) => (acc += orderItem.price * orderItem.quantity),
+			(acc, orderItem) => (acc += orderItem.getTotal()),
 			0
 		);
 		if (this.coupon) {
-			total -= (total * this.coupon.percentage) / 100;
+			total -= this.coupon.calculateDiscount(total);
 		}
 
 		return total;
