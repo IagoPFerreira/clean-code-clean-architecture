@@ -1,3 +1,4 @@
+import Coupon from './Coupon';
 import Cpf from './Cpf';
 import Item from './Item';
 import OrderItem from './OrderItem';
@@ -5,6 +6,7 @@ import OrderItem from './OrderItem';
 export default class Order {
 	cpf: Cpf;
 	orderItems: OrderItem[];
+	coupon?: Coupon;
 
 	constructor(cpf: string) {
 		this.cpf = new Cpf(cpf);
@@ -15,10 +17,19 @@ export default class Order {
 		this.orderItems.push(new OrderItem(item.idItem, item.price, quantity));
 	}
 
+	addCoupon(coupon: Coupon) {
+		this.coupon = coupon;
+	}
+
 	getTotal() {
-		return this.orderItems.reduce(
+		let total = this.orderItems.reduce(
 			(acc, orderItem) => (acc += orderItem.price * orderItem.quantity),
 			0
 		);
+		if (this.coupon) {
+			total -= (total * this.coupon.percentage) / 100;
+		}
+
+		return total;
 	}
 }
