@@ -17,7 +17,7 @@ export const guitar = {
 		height: 10,
 		width: 30,
 		length: 100,
-		weight: 2,
+		weight: 3,
 	},
 };
 export const cable = {
