@@ -19,4 +19,17 @@ export default class Item {
 			throw new Error('Invalid dimensions');
 		}
 	}
+
+	getVolume() {
+		return (
+			(this.dimensions.height *
+				this.dimensions.length *
+				this.dimensions.width) /
+			1000
+		);
+	}
+
+	getDensity() {
+		return this.dimensions.weight / this.getVolume();
+	}
 }
