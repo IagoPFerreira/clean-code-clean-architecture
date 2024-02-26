@@ -20,7 +20,15 @@ export default class Order {
 		if (this.orderItems.some((orderItem) => orderItem.idItem === item.idItem)) {
 			throw new Error('Already added item');
 		}
-		this.orderItems.push(new OrderItem(item.idItem, item.price, quantity));
+		this.orderItems.push(
+			new OrderItem(
+				item.idItem,
+				item.price,
+				quantity,
+				item.getDensity(),
+				item.getVolume()
+			)
+		);
 	}
 
 	addCoupon(coupon: Coupon) {
@@ -37,5 +45,15 @@ export default class Order {
 		}
 
 		return total;
+	}
+
+	getFreight() {
+		let total = this.orderItems.reduce(
+			(acc, orderItem) =>
+				(acc += 1000 * orderItem.volume * (orderItem.density / 100)),
+			0
+		);
+
+		return total > 10 ? total : 10;
 	}
 }
