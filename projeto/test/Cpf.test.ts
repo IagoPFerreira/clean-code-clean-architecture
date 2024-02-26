@@ -45,3 +45,9 @@ test('Deve tentar validar o cpf nulo', () => {
 	// @ts-ignore
 	expect(() => new Cpf(null)).toThrow(new Error('Invalid CPF'));
 });
+
+test('Deve retornar o cpf informado', () => {
+	const isValid = new Cpf('147.085.437-60');
+	expect(isValid).toBeDefined();
+	expect(isValid.getValue()).toBe('147.085.437-60');
+});
