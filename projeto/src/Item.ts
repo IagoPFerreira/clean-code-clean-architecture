@@ -1,23 +1,24 @@
+interface Dimensions {
+	height: number;
+	length: number;
+	width: number;
+	weight: number;
+}
+
 export default class Item {
 	constructor(
 		readonly idItem: number,
 		readonly description: string,
 		readonly price: number,
-		readonly dimensions: {
-			height: number;
-			length: number;
-			width: number;
-			weight: number;
-		}
+		readonly dimensions: Dimensions
 	) {
-		if (
-			dimensions.height <= 0 ||
-			dimensions.length <= 0 ||
-			dimensions.width <= 0 ||
-			dimensions.weight <= 0
-		) {
+		if (!this.validDimensions(dimensions)) {
 			throw new Error('Invalid dimensions');
 		}
+	}
+
+	validDimensions(dimensions: Dimensions): boolean {
+		return !Object.values(dimensions).some((value) => value <= 0);
 	}
 
 	getVolume() {
